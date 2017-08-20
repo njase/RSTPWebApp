@@ -1,0 +1,25 @@
+<!doctype html>
+{% from "rwa_macros.html" import nav_link with context %}
+<html>
+  <ul class="nav navbar-nav">
+  {{ nav_link('input', 'Home') }}
+  </ul>
+   <body>
+      <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
+      <h4> Here is the result of the simulation for 1-D RSTP problem </h3>
+      <form action = "/input" method = post>
+      <fieldset>
+      <legend> Initial values </legend>
+      Solver method: <br>
+      </fieldset>
+      </form>
+
+      <fieldset>
+      <legend> Output values </legend>
+      <br> <br> <br>
+        The simulation is ongoing. Please be patient
+      <br> <br> <br>
+      </fieldset>
+
+   </body>
+</html>
