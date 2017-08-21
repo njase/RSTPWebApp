@@ -3,15 +3,42 @@
 <html>
   <ul class="nav navbar-nav">
   {{ nav_link('rstp.input', 'Home') }}
-  </ul>
-   <body>
+  </ul> 
+  <head>
+  <style media="screen" type="text/css">
+  div#loading {
+    width: 35px;
+    height: 35px;
+    display: none;
+    background: url('/static/loader.gif') center center no-repeat;
+    background-attachment: fixed;
+    cursor: wait;
+    }
+    body1 {
+    background: url('/static/loader.gif') center center no-repeat;
+    background-attachment: fixed;
+    cursor: wait;
+    }
+  </style>
+   <script type="text/javascript">// <![CDATA[
+        function loading(){
+        	alert("I am an alert box!");
+            //$("#loading").show();
+            //$("#content").hide();       
+            var link = document.getElementById('content');
+            link.style.display = 'none';
+            var link = document.getElementById('loading');
+            link.style.display = 'block';
+        }
+   // ]]></script>  
+  </head>
+   <body>    
       <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
       <h4> This is a web application for 1-D RSTP solver </h3>
       <text> More text here </text>
       <br>
       <br>
       <br>
-
       {% for message in form.discontinuity.errors %}
          <div>{{ message }}</div>
       {% endfor %}
@@ -38,14 +65,14 @@
       {% endfor %}
       {% for message in form.Rho_right.errors %}
          <div>{{ message }}</div>
-      {% endfor %}
-      
+      {% endfor %}      
+ 
       <form action = "input" method = post>
          <fieldset>
             <legend>Initial Values</legend>
             {{ form.hidden_tag() }}
-            
-            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+            <div id="loading"></div>
+            <div id="content" style = font-size:20px; font-weight:bold; margin-left:150px;>
                {{ form.ode_solver.label }} {{ form.ode_solver }}
                <br>
                
@@ -76,11 +103,9 @@
                  </TR>
                </table>
 
-               {{ form.start_sim }}
-            </div>
-            
+               <input type="submit" name="anything_submit" value="Submit" onclick="loading();">
+            </div>            
          </fieldset>
-      </form>
-      
+      </form>  
    </body>
 </html>

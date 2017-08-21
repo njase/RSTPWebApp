@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 def not_found(error):
     return render_template('404.html'), 404
 
-# Import a module / component using its blueprint handler variable (mod_auth)
+# Import a module / component using its blueprint handler variable (mod_rstp)
 from app.mod_rstp.controllers import mod_rstp as rstp_module
 
 # Register blueprint(s)

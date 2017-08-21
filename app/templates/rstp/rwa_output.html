@@ -4,6 +4,34 @@
   <ul class="nav navbar-nav">
   {{ nav_link('rstp.input', 'Home') }}
   </ul>
+    <head>
+  <style media="screen" type="text/css">
+  div#loading {
+    width: 35px;
+    height: 35px;
+    display: none;
+    background: url('/static/loader.gif') center center no-repeat;
+    background-attachment: fixed;
+    cursor: wait;
+    }
+    body {
+    background: url('/static/loader.gif') center center no-repeat;
+    background-attachment: fixed;
+    cursor: wait;
+    }
+  </style>
+   <script type="text/javascript">// <![CDATA[
+        function loading(){
+        	alert("I am an alert box!");
+            //$("#loading").show();
+            //$("#content").hide();       
+            var link = document.getElementById('content');
+            link.style.display = 'none';
+            var link = document.getElementById('loading');
+            link.style.display = 'block';
+        }
+   // ]]></script>  
+  </head>
    <body>
       <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
       <h4> Here is the result of the simulation for 1-D RSTP problem </h3>
