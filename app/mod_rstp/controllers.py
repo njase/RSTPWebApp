@@ -17,23 +17,23 @@ mod_rstp = Blueprint('rstp', __name__, url_prefix='/rstp')
 # Set the route and accepted methods
 @mod_rstp.route('/input', methods = ['GET', 'POST'])
 def input():
-   print("saurabh : 1")
+   print("saurabh : 0")
    form = InputForm()
    if request.method == 'POST':
       if form.validate() == False:
-         print("saurabh : 1")
-         flash('All fields are required.')
-         return render_template('rstp/rwa_input.html', form = form)
+        print("saurabh : 1")
+        flash('All fields are required.')
+        return render_template('rstp/rwa_input.html', form = form)
       else:
         print("saurabh : 2")
         ##Here, store values in DB and then redirect as GET
-        return redirect(url_for('mod_rstp.output',messages=1))
+        return redirect(url_for('rstp.output',messages=1))
    elif request.method == 'GET':
-         print("saurabh : 3")
-         return render_template('rstp/rwa_input.html', form = form)
+        print("saurabh : 3")
+        return render_template('rstp/rwa_input.html', form = form)
    else:
-         print("saurabh : 4")
-         print("Unknown form request method..unexpected and ignored")
+        print("saurabh : 4")
+        print("Unknown form request method..unexpected and ignored")
 
 @mod_rstp.route('/output', methods = ['GET','POST'])
 def output():
