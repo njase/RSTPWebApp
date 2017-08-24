@@ -1,6 +1,7 @@
 # Import flask dependencies
 from flask import Blueprint, request, render_template, \
-                  flash, g, session, redirect, url_for
+                  flash, g, session, redirect, url_for, \
+                  jsonify
 
 # Import the database object from the main app module
 from app import db
@@ -17,7 +18,6 @@ mod_rstp = Blueprint('rstp', __name__, static_folder='static', url_prefix='/rstp
 # Set the route and accepted methods
 @mod_rstp.route('/input')
 def home():
-   print("saurabh : 0")
    form = InputForm()
    if request.method == 'GET':
        print("saurabh : 3")
@@ -28,7 +28,6 @@ def home():
 # Set the route and accepted methods
 @mod_rstp.route('/input', methods = ['POST'])
 def input():
-   print("saurabh : 0_1")
    form = InputForm()
    if form.validate() == False:
        print("saurabh : 1")
@@ -38,6 +37,14 @@ def input():
         print("saurabh : 2")
         ##Here, store values in DB and then redirect as GET
         return redirect(url_for('rstp.output',messages=1))
+
+
+@mod_rstp.route('/check/', methods=['GET'])
+def check():
+    #ret_data = {"value": request.args.get('echoValue')}
+    ret_data = {"value": 1}
+    return jsonify(ret_data)
+
       
 @mod_rstp.route('/output', methods = ['GET','POST'])
 def output():
