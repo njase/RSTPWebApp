@@ -1,0 +1,88 @@
+<!doctype html>
+{% from "rstp/rwa_macros.html" import nav_link with context %}
+<html>
+  <ul class="nav navbar-nav">
+  {{ nav_link('rstp.input', 'Home') }}
+  </ul> 
+     <body>    
+      <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
+      <h4> This is a web application for 1-D RSTP solver </h3>
+      <text> More text here </text>
+      <br>
+      <br>
+      <br>
+      {% for message in form.discontinuity.errors %}
+         <div>{{ message }}</div> -->
+      {% endfor %}
+      {% for message in form.Vx_left.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.Vx_right.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.Mx_left.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.Mx_right.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.D_left.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.D_right.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.Rho_left.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      {% for message in form.Rho_right.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}      
+      {% for message in form.mesh_size.errors %}
+         <div>{{ message }}</div> -->
+      {% endfor %}
+ 
+      <form action = "input" method = post>
+         <fieldset>
+            <legend>Initial Values</legend>
+            {{ form.hidden_tag() }}
+            <div style = font-size:20px; font-weight:bold; margin-left:150px;>
+            <div id="content" style = font-size:20px; font-weight:bold; margin-left:150px;>
+               {{ form.ode_solver.label }} {{ form.ode_solver }}
+               <br>
+               {{ form.discontinuity.label }} {{ form.discontinuity }}
+               <br>
+               {{ form.mesh_size.label }} {{ form.mesh_size }}
+               <br>
+               {{ form.cfl.label }} {{ form.cfl }}
+               <br>
+               <br>
+               <table>
+                 <TR>
+                     <TD>    </TD>
+                     <TD> Vx </TD>
+                     <TD> Mx </TD>
+                     <TD> D </TD>
+                     <TD> Rho </TD>
+                 </TR>
+                 <TR>
+                     <TD> Left part </TD>
+                     <TD> {{form.Vx_left}} </TD>
+                     <TD> {{form.Mx_left}} </TD>
+                     <TD> {{form.D_left}} </TD>
+                     <TD> {{form.Rho_left}} </TD>
+                 </TR>
+                 <TR>
+                     <TD> Right part </TD>
+                     <TD> {{form.Vx_right}} </TD>
+                     <TD> {{form.Mx_right}} </TD>
+                     <TD> {{form.D_right}} </TD>
+                     <TD> {{form.Rho_right}} </TD>
+                 </TR>
+               </table>
+               {{ form.start_sim }}
+            </div>            
+         </fieldset>
+      </form>  
+   </body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+{% from "rstp/rwa_macros.html" import nav_link with context %}
+<html>
+  <ul class="nav navbar-nav">
+  {{ nav_link('rstp.input', 'Home') }}
+  </ul>
+  <head>
+
+  <style media="screen" type="text/css">
+  </style>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <script type="text/javascript" src="/static/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript">
+       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+       var db_id = -1;
+  </script>
+
+  <script type="text/javascript">
+        function changeBackground(set) {
+            if (set == 1)
+            {
+                $('body').css('background','url(/static/loader.gif) center center no-repeat');
+                $('body').css('cursor','wait');
+                $('body').css('background-attachment','fixed');
+            }
+            else
+            {
+                $('body').css('background','');
+                $('body').css('cursor','auto');
+            }
+        }
+
+        function checkSimStatus() {
+            $.ajax({
+                type: "GET",
+                url: $SCRIPT_ROOT + "check",
+                data: {"db_id":db_id},
+                contentType: "application/xml; charset=utf-8",
+                success: function(data) {
+                to_poll = 1;
+                if(data.sim_status == 1)
+                {
+                    $('#SimMsg').text("Simulation finished. Results are as below");
+                    changeBackground(0);  //reset background
+                    document.getElementsByName("D_img")[0].src = data.D; 
+                    document.getElementsByName("P_img")[0].src = data.P; 
+                    document.getElementsByName("U_img")[0].src = data.U; 
+                    document.getElementsByName("V_img")[0].src = data.V; 
+                    document.getElementById("imagesId").style.display = 'block';
+
+                    to_poll = 0;
+                    
+                }
+                else if (data.sim_status != 0)
+                {
+                    if (data.sim_status == 2)
+                    {
+                        $('#SimMsg').text("Simulation seems to have been stopped by user. Please try again");
+                    }
+                    else
+                    {
+                        $('#SimMsg').text("Internal error occured during Simulation. Please try again");
+
+                    }
+                    to_poll = 0;
+                }
+
+                if (to_poll == 1)
+                   setTimeout(checkSimStatus, 5000);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //alert(errorThrown);
+                //Ignore and continue to poll
+                setTimeout(checkSimStatus, 5000);
+            }
+        });      
+
+        }
+
+        $(document).ready(function(){
+            changeBackground(1);  //set background
+            //Hide the image section of the page
+            document.getElementById("imagesId").style.display = 'none';
+
+            //capture the DB ID from GET
+            db_id = location.search.split('messages=')[1] ? location.search.split('messages=')[1] : -1;
+
+            //start polling server for update
+            setTimeout(checkSimStatus, 5000);
+        });
+
+  </script>
+  </head>
+</script>
+
+
+   <body>
+      <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
+      <h4> Here is the result of the simulation for 1-D RSTP problem </h3>
+      <form action = "/input" method = post>
+      <fieldset>
+      <legend> Initial values </legend>
+      Solver method: <br>
+      </fieldset>
+      {{ form.stop_sim }}
+      </form>
+
+      <fieldset>
+      <legend> Output values </legend>
+      <br> <br> <br>
+      <strong><div id='SimMsg'>The simulation is ongoing. Please be patient</div></strong>
+      <br> <br> <br>
+      <strong><div>Images here </div></strong>
+      <div id="imagesId"> 
+      <table>
+        <TR>
+           <TD>
+             <figure> <img src="" name="D_img" /> <figcaption> Density </figcaption> </figure>
+           </TD> 
+           <TD>
+             <figure> <figcaption> Pressure </figcaption> <img src="" name="P_img" /> </figure>
+           </TD> 
+        </TR>
+        <TR>
+           <TD>
+             <figure> <img src="" name="U_img" /> <figcaption> Ux </figcaption> </figure>
+           </TD> 
+           <TD>
+             <figure> <figcaption> Vx </figcaption> <img src="" name="V_img" /> </figure>
+           </TD> 
+        </TR>
+      </table>
+      </div> 
+      </fieldset>
+
+   </body>
+</html>
