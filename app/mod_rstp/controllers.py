@@ -9,8 +9,8 @@ from app import db
 # Import module forms
 from app.mod_rstp.forms import InputForm, OutputForm
 
-# Import module models (i.e. User)
-from app.mod_rstp.models import User
+# Import module models
+from app.mod_rstp.models import UserSim
 
 # Define the blueprint: 'rstp', set its url prefix: app.url/rstp
 mod_rstp = Blueprint('rstp', __name__, static_folder='static', url_prefix='/rstp')
@@ -33,7 +33,16 @@ def input():
        return render_template('rstp/rwa_input.html', form = form)
    else:
         ##Here, store values in DB and then redirect as GET
-        return redirect(url_for('rstp.output',messages=1))
+        db_id = UserSim().validate_and_add(form.ode_solver.data,
+                                           form.discontinuity.data,
+                                           [form.Vx_left.data,form.Vx_right.data],
+                                           [form.Mx_left.data,form.Mx_right.data],
+                                           [form.D_left.data,form.D_right.data],
+                                           [form.Rho_left.data,form.Rho_right.data],
+                                           form.mesh_size.data,
+                                           form.cfl.data)
+        
+        return redirect(url_for('rstp.output',messages=db_id))
 
 
 @mod_rstp.route('/check/', methods=['GET'])
@@ -43,10 +52,12 @@ def check():
     U = D
     V = D
     #Read the DB index from GET request
-    db_id = 1
+    db_id = request.args.get("db_id")
+    print("SAURABH RECEUVED A POLL REQUEST with db_id = " + str(db_id))
     #Read the status of this simulation from DB
     #0 = Ongoing, 1 = Finished success , 2 = Stopped, otherwise = internal error
-    sim_status = 1
+    sim_status = UserSim().check_status(db_id)
+    print("Status =  " + str(sim_status))
     #Make return data
     if sim_status == 1:
         D = "/static/"+str(db_id)+"_D_img.jpeg"

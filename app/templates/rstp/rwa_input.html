@@ -12,7 +12,7 @@
       <br>
       <br>
       {% for message in form.discontinuity.errors %}
-         <div>{{ message }}</div>
+         <div>{{ message }}</div> -->
       {% endfor %}
       {% for message in form.Vx_left.errors %}
          <div>{{ message }}</div>
@@ -38,6 +38,9 @@
       {% for message in form.Rho_right.errors %}
          <div>{{ message }}</div>
       {% endfor %}      
+      {% for message in form.mesh_size.errors %}
+         <div>{{ message }}</div> -->
+      {% endfor %}
  
       <form action = "input" method = post>
          <fieldset>
@@ -47,8 +50,11 @@
             <div id="content" style = font-size:20px; font-weight:bold; margin-left:150px;>
                {{ form.ode_solver.label }} {{ form.ode_solver }}
                <br>
-               
                {{ form.discontinuity.label }} {{ form.discontinuity }}
+               <br>
+               {{ form.mesh_size.label }} {{ form.mesh_size }}
+               <br>
+               {{ form.cfl.label }} {{ form.cfl }}
                <br>
                <br>
                <table>
