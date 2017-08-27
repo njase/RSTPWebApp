@@ -19,7 +19,8 @@ class InputForm(Form):
    Rho_left = DecimalField("",[validators.InputRequired("Please enter the initial value for Rho_left")])
    Rho_right = DecimalField("",[validators.InputRequired("Please enter the initial value for Rho_right")])
    cfl = DecimalField("CFL (only for explicit method)")
-   mesh_size = IntegerField("Mesh length",[validators.Required("Please enter the mesh length")])
+   mesh_size = IntegerField("Number of FV cells",[validators.Required("Please enter the number of FV cells")])
+   gamma = DecimalField("Gamma (0 for isothermal case)",[validators.InputRequired("Please enter the value of gamma")])
 
    start_sim = SubmitField("Start Simulation")
 
