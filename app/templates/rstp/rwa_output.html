@@ -18,6 +18,22 @@
   </script>
 
   <script type="text/javascript">
+  		function StopSim() {  		
+  		$.ajax({
+                type: "GET",
+                url: $SCRIPT_ROOT + "stop",
+                data: {"db_id":db_id},
+                contentType: "application/xml; charset=utf-8",
+                success: function(data) {
+                //We currently ignore any return status of Stop
+                },
+            error: function(jqXHR, textStatus, errorThrown) {
+                //alert(errorThrown);                
+            }
+        });      
+  			
+  		}
+  		
         function changeBackground(set) {
             if (set == 1)
             {
@@ -57,7 +73,8 @@
                 {
                     if (data.sim_status == 2)
                     {
-                        $('#SimMsg').text("Simulation seems to have been stopped by user. Please try again");
+                        $('#SimMsg').text("Simulation seems to have been stopped by user. Please try again later");
+                        changeBackground(0);  //reset background
                     }
                     else
                     {
@@ -86,7 +103,7 @@
 
             //capture the DB ID from GET
             db_id = location.search.split('messages=')[1] ? location.search.split('messages=')[1] : -1;
-
+            
             //start polling server for update
             setTimeout(checkSimStatus, 5000);
         });
@@ -99,36 +116,43 @@
    <body>
       <h1 style = "text-align: center;"> Welcome to RSTP Web App </h1>
       <h4> Here is the result of the simulation for 1-D RSTP problem </h3>
-      <form action = "/input" method = post>
-      <fieldset>
+      <div id="initValId">
+      <fieldset>      
       <legend> Initial values </legend>
-      Solver method: <br>
+      Solver method: {{ data.solver }} <br>
+      Discontinuity Location: {{ data.discontinuity }} <br>
+      Number of FV cells: {{ data.mesh_size }} <br>
+      CFL: {{ data.cfl }} <br>
+      Gamma: {{ data.gamma }} <br>
+      Vx_left: {{ data.Vx_left }} Vx_right: {{ data.Vx_right }} <br>
+      Mx_left: {{ data.Mx_left }} Mx_right: {{ data.Mx_right }} <br>
+      D_left: {{ data.D_left }} D_right: {{ data.D_right }} <br>
+      Rho_left: {{ data.rho_left }} Rho_right: {{ data.rho_right }} <br>
+      </div>
       </fieldset>
-      {{ form.stop_sim }}
-      </form>
+      <button id="stopBtn" onclick="StopSim(this)">Stop Simulation</button>
 
       <fieldset>
       <legend> Output values </legend>
       <br> <br> <br>
       <strong><div id='SimMsg'>The simulation is ongoing. Please be patient</div></strong>
       <br> <br> <br>
-      <strong><div>Images here </div></strong>
       <div id="imagesId"> 
       <table>
         <TR>
            <TD>
-             <figure> <img src="" name="D_img" /> <figcaption> Density </figcaption> </figure>
+             <figure> <img src="" name="D_img" /> </figure>
            </TD> 
            <TD>
-             <figure> <figcaption> Pressure </figcaption> <img src="" name="P_img" /> </figure>
+             <figure> <img src="" name="P_img" /> </figure>
            </TD> 
         </TR>
         <TR>
            <TD>
-             <figure> <img src="" name="U_img" /> <figcaption> Ux </figcaption> </figure>
+             <figure> <img src="" name="U_img" /> </figure>
            </TD> 
            <TD>
-             <figure> <figcaption> Vx </figcaption> <img src="" name="V_img" /> </figure>
+             <figure> <img src="" name="V_img" /> </figure>
            </TD> 
         </TR>
       </table>

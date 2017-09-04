@@ -41,6 +41,9 @@
       {% for message in form.mesh_size.errors %}
          <div>{{ message }}</div> -->
       {% endfor %}
+      {% for message in form.gamma.errors %}
+         <div>{{ message }}</div> -->
+      {% endfor %}
  
       <form action = "input" method = post>
          <fieldset>
@@ -55,6 +58,8 @@
                {{ form.mesh_size.label }} {{ form.mesh_size }}
                <br>
                {{ form.cfl.label }} {{ form.cfl }}
+               <br>
+               {{ form.gamma.label }} {{ form.gamma }}
                <br>
                <br>
                <table>
