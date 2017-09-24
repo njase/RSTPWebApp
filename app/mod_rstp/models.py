@@ -30,9 +30,10 @@ class SimModel(Base):
     cfl           = db.Column(db.Float, default=1.0)
     mesh_size     = db.Column(db.Integer)
     gamma         = db.Column(db.Float, default = 0)
+    max_iter_count     = db.Column(db.Integer, default = 1)
 
     # New instance instantiation procedure
-    def __init__(self,ode_solver,discont,Vx,Mx,D,rho,msize,cfl,gamma):
+    def __init__(self,ode_solver,discont,Vx,Mx,D,rho,msize,cfl,gamma,max_iter):
         self.sim_status = 0
         self.solver = ode_solver
         self.discontinuity = discont
@@ -43,6 +44,7 @@ class SimModel(Base):
         self.mesh_size = msize
         self.cfl = cfl    
         self.gamma = gamma
+        self.max_iter_count = max_iter
 
     def __repr__(self):
         return '<User %d>' % (self.id)

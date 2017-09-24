@@ -8,7 +8,7 @@ from wtforms import IntegerField, DecimalField, SubmitField, SelectField
 from wtforms import validators, ValidationError
 
 class InputForm(Form):
-    ode_solver = SelectField('Solver method', choices = [('EE', 'Forward Euler'), ('IE', 'Backward Euler'),('CN', 'Crank Nicholson')])
+    ode_solver = SelectField('Solver method', choices = [('EE', 'Forward Euler'), ('IE', 'Backward Euler')])
     discontinuity = DecimalField("Discontinuity location (%)",[validators.Required("Please enter the location of discontinuity")])
     Vx_left = DecimalField("",[validators.InputRequired("Please enter the initial value for Vx_left")])
     Vx_right = DecimalField("",[validators.InputRequired("Please enter the initial value for Vx_right")])
@@ -18,9 +18,10 @@ class InputForm(Form):
     D_right = DecimalField("",[validators.InputRequired("Please enter the initial value for D_right")])
     Rho_left = DecimalField("",[validators.InputRequired("Please enter the initial value for Rho_left")])
     Rho_right = DecimalField("",[validators.InputRequired("Please enter the initial value for Rho_right")])
-    cfl = DecimalField("CFL (only for explicit method)")
+    cfl = DecimalField("CFL")
     mesh_size = IntegerField("Number of FV cells",[validators.Required("Please enter the number of FV cells")])
     gamma = SelectField('Gamma', choices = [('0', 'Isothermal'), ('4/3', '4/3'),('5/3', '5/3'),('2', '2')])
+    max_iter_count = IntegerField("Convergence iterations (only for implicit)")
     
     start_sim = SubmitField("Start Simulation")
 

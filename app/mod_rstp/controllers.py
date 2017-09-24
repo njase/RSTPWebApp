@@ -17,8 +17,8 @@ mod_rstp = Blueprint('rstp', __name__, static_folder='static', url_prefix='/rstp
 def home():
     form = InputForm()
     if request.method == 'GET':
+        print('RSTPWebApp : Input form rendered')
         return render_template('rstp/rwa_input.html', form = form)
-          
     else:
         print("Unexpected request method received and ignored")
    
@@ -28,8 +28,10 @@ def rstp_input():
     form = InputForm()
     if form.validate() == False:
         flash('All fields are required.')
+        print('RSTPWebApp Start simulation: Form validation failure')
         return render_template('rstp/rwa_input.html', form = form)        
     else:
+        print('RSTPWebApp Start simulation: Form validation ok, simulation triggered')
         ##Here, store values in DB and then redirect as GET
         # Start simuilation in a new thread
         db_id = UserSim().validate_and_start(form.ode_solver.data,
@@ -39,7 +41,8 @@ def rstp_input():
                                            [form.D_left.data,form.D_right.data],
                                            [form.Rho_left.data,form.Rho_right.data],
                                            form.mesh_size.data,form.gamma.data,
-                                           form.cfl.data
+                                           form.cfl.data,
+                                           form.max_iter_count.data
                                            )
         
         return redirect(url_for('rstp.rstp_output',messages=db_id))
@@ -56,27 +59,28 @@ def rstp_check():
     #Read the status of this simulation from DB
     #0 = Ongoing, 1 = Finished success , 2 = Stopped, otherwise = internal error
     sim_status = UserSim().check_status(db_id)
-    print("Status =  " + str(sim_status))
+    print("RSTPWebApp Check: DB index = " + str(db_id) + " , Status =  " + str(sim_status))
     #Make return data
     if sim_status == 1:
         D = "/static/"+str(db_id)+"_D_img.png"
         P = "/static/"+str(db_id)+"_P_img.png"
         U = "/static/"+str(db_id)+"_U_img.png"
         V = "/static/"+str(db_id)+"_V_img.png"
-        print("Simulation finished - here's what DB says")
-        user_data = UserSim().query(db_id)
-        print(str(user_data.sim_status))
-        print(str(user_data.solver))
-        print(str(user_data.discontinuity))
-        print(str(user_data.Vx_left))
-        print(str(user_data.Vx_right))
-        print(str(user_data.D_left))
-        print(str(user_data.D_right))
-        print(str(user_data.rho_left))
-        print(str(user_data.rho_right))
-        print(str(user_data.cfl))
-        print(str(user_data.mesh_size))
-        print(str(user_data.gamma))
+        print("RSTPWebApp: Simulation Status: finished")
+        #user_data = UserSim().query(db_id)
+        #print(str(user_data.sim_status))
+        #print(str(user_data.solver))
+        #print(str(user_data.discontinuity))
+        #print(str(user_data.Vx_left))
+        #print(str(user_data.Vx_right))
+        #print(str(user_data.D_left))
+        #print(str(user_data.D_right))
+        #print(str(user_data.rho_left))
+        #print(str(user_data.rho_right))
+        #print(str(user_data.cfl))
+        #print(str(user_data.mesh_size))
+        #print(str(user_data.gamma))
+        #print(str(user_data.max_iter_count))
     
     ret_data = {"sim_status":sim_status,"D":D,"P":P,"U":U,"V":V}
     return jsonify(ret_data)
@@ -87,6 +91,7 @@ def rstp_stop():
     #Stop simulation 
     #Read the DB index from GET request
     db_id = request.args.get("db_id")
+    print('RSTPWebApp Stop: Command to stop DB index = '+ str(db_id))
     #Stop this simulation
     sim_status = UserSim().stop(db_id)
     ret_data = {"sim_status":sim_status}
@@ -98,9 +103,11 @@ def rstp_output():
     if request.method == 'POST':
         if form.validate() == False:
             flash('All fields are required.')
+            print('RSTPWebApp Output: Form validation failed')
             return render_template("rstp/rwa_output.html", form=form)
         else:
             flash('Stopping of simulation is not supported yet!')
+            print('RSTPWebApp Output: Unandled case in POST')
     elif request.method == 'GET':        
         ##Now here read from DB and render output values
         #Read the DB index from GET request
@@ -112,6 +119,7 @@ def rstp_output():
                 "D_left":udata.D_left, "D_right":udata.D_right, \
                 "rho_left":udata.rho_left, "rho_right":udata.rho_right,
                 "cfl":udata.cfl, "mesh_size":udata.mesh_size,\
-                "gamma":udata.gamma
+                "gamma":udata.gamma, "max_iter_count":udata.max_iter_count
             }
+        print('RSTPWebApp : Output form rendered for DB index = ' + str(db_id))
         return render_template('rstp/rwa_output.html', form = form, data = data)

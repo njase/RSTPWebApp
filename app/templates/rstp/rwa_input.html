@@ -67,6 +67,12 @@
             {% for message in form.discontinuity.errors %}
             	<div> <font color="red"> {{ message }} </font> </div>        		
       		{% endfor %}
+      		{% for message in form.cfl.errors %}
+            	<div> <font color="red"> {{ message }} </font> </div>        		
+      		{% endfor %}
+      		{% for message in form.max_iter_count.errors %}
+            	<div> <font color="red"> {{ message }} </font> </div>        		
+      		{% endfor %}
       		{% for message in form.Vx_left.errors %}
          		<div> <font color="red"> {{ message }}</font> </div>
       		{% endfor %}
@@ -93,10 +99,15 @@
             <legend> <h3> Parameters </h3> </legend>
             {{ form.hidden_tag() }}
             
-            	Discontinuity location refers to the point where the two physical states are separated in the beginning.
+            	<strong> Discontinuity location: </strong> refers to the point where the two physical states are separated inside the tube in the beginning.
             	<br>
-            	CFL = Courant–Friedrichs–Lewy condition and is used only for explicit solver. This parameter is ignored for implicit solvers.         	
-                <br>
+            	<strong> CFL :</strong>
+            	<ul>
+            		<li> For Explicit solver : Courant–Friedrichs–Lewy condition. 
+            		<li> For Implicit solver :  Used as time_step_size = cfl*spatial_step_size      	
+                </ul>
+           
+                <strong> Convergence iterations : </strong> Number of sub-iterations to account for Transport Velocity in implicit solver. This parameter is ignored for explicit solver
 			
 		<div class="input-params">
     	
@@ -146,7 +157,17 @@
 				</div>
 
         		<div class="pure-u-3-5">
-            		<div class="l-box"> {{ form.cfl }} </div>
+            		<div class="l-box"> {{ form.cfl(value=0.25) }} </div>
+				</div>
+       		</div>
+       		
+       		<div class="pure-g">
+				<div class="pure-u-2-5">
+            		<div class="l-box"> {{ form.max_iter_count.label }} </div>
+				</div>
+
+        		<div class="pure-u-3-5">
+            		<div class="l-box"> {{ form.max_iter_count(value=1) }} </div>
 				</div>
        		</div>
     	
