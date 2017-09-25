@@ -38,7 +38,7 @@ class WorkerSim(Thread):
   
     def explicit_euler(self,user_data):
             params = RSTPExplicitParams(user_data.mesh_size,user_data.gamma,user_data.cfl)             
-            params.set_fig_path('/home/saur/ilastik/miniconda2/envs/RSTPWebApp/app/static/')
+            params.set_fig_path('./app/static/')
             params.fv_boundary_strategy = FVTransverse #Default, may also be skipped 
             iv = RSTPIV(Vx=[user_data.Vx_left,user_data.Vx_right], \
                         Mx=[user_data.Mx_left,user_data.Mx_right], \
@@ -51,7 +51,7 @@ class WorkerSim(Thread):
     
     def implicit_euler(self,user_data):
             params = RSTPImplicitParams(user_data.mesh_size,1.0,user_data.gamma,user_data.max_iter_count,user_data.cfl)             
-            params.set_fig_path('/home/saur/ilastik/miniconda2/envs/RSTPWebApp/app/static/')
+            params.set_fig_path('./app/static/')
             params.fv_boundary_strategy = FVTransverse #Default, may also be skipped 
             iv = RSTPIV(Vx=[user_data.Vx_left,user_data.Vx_right], \
                         Mx=[user_data.Mx_left,user_data.Mx_right], \

@@ -1,5 +1,5 @@
 # Import Form and RecaptchaField (optional)
-from flask_wtf import Form # , RecaptchaField
+from flask_wtf import FlaskForm # , RecaptchaField
 
 # Import Form elements such as TextField and BooleanField (optional)
 from wtforms import IntegerField, DecimalField, SubmitField, SelectField
@@ -7,7 +7,7 @@ from wtforms import IntegerField, DecimalField, SubmitField, SelectField
 # Import Form validators
 from wtforms import validators, ValidationError
 
-class InputForm(Form):
+class InputForm(FlaskForm):
     ode_solver = SelectField('Solver method', choices = [('EE', 'Forward Euler'), ('IE', 'Backward Euler')])
     discontinuity = DecimalField("Discontinuity location (%)",[validators.Required("Please enter the location of discontinuity")])
     Vx_left = DecimalField("",[validators.InputRequired("Please enter the initial value for Vx_left")])
@@ -25,5 +25,5 @@ class InputForm(Form):
     
     start_sim = SubmitField("Start Simulation")
 
-class OutputForm(Form):
+class OutputForm(FlaskForm):
     stop_sim = SubmitField("Stop Simulation")
